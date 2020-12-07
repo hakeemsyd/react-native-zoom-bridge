@@ -23,6 +23,8 @@ import us.zoom.sdk.StartMeetingParamsWithoutLogin;
 import us.zoom.sdk.JoinMeetingOptions;
 import us.zoom.sdk.JoinMeetingParams;
 
+import us.zoom.sdk.MeetingViewsOptions;
+
 public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements ZoomSDKInitializeListener, MeetingServiceListener, LifecycleEventListener {
 
   private final static String TAG = "RNZoomBridge";
@@ -175,6 +177,9 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
       final MeetingService meetingService = zoomSDK.getMeetingService();
 
       JoinMeetingOptions opts = new JoinMeetingOptions();
+      opts.no_driving_mode = true;
+      MeetingViewsOptions meetOpts = new MeetingViewsOptions();
+      opts.meeting_views_options = meetOpts.NO_BUTTON_MORE + meetOpts.NO_BUTTON_SHARE + meetOpts.NO_BUTTON_PARTICIPANTS + meetOpts.NO_BUTTON_VIDEO + meetOpts.NO_BUTTON_SWITCH_CAMERA + meetOpts.NO_BUTTON_AUDIO + meetOpts.NO_TEXT_MEETING_ID + meetOpts.NO_TEXT_PASSWORD;
       JoinMeetingParams params = new JoinMeetingParams();
       params.displayName = displayName;
       params.meetingNo = meetingNo;
