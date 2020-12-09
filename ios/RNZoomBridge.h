@@ -9,5 +9,11 @@
 
 @interface RNZoomBridge : NSObject <RCTBridgeModule, MobileRTCAuthDelegate, MobileRTCMeetingServiceDelegate>
 
+- (void)setMeetingTitleHidden:(BOOL)hidden;
+
+- (void)setMeetingPasswordHidden:(BOOL)hidden;
+
+- (void)setBottomBarHidden:(BOOL)hidden;
+
 @end
   

@@ -147,6 +147,9 @@ RCT_EXPORT_METHOD(
       meetingPromiseReject = reject;
     
       MobileRTCMeetingService *ms = [[MobileRTC sharedRTC] getMeetingService];
+      [self setMeetingTitleHidden:YES];
+      [self setMeetingPasswordHidden:YES];
+      [self setBottomBarHidden:YES];
       if (ms) {
         ms.delegate = self;
     
@@ -228,6 +231,21 @@ RCT_EXPORT_METHOD(
 
   meetingPromiseResolve = nil;
   meetingPromiseReject = nil;
+}
+
+- (void)setMeetingTitleHidden:(BOOL)hidden
+{
+    [[MobileRTC sharedRTC] getMeetingSettings].meetingTitleHidden = hidden;
+}
+
+- (void)setMeetingPasswordHidden:(BOOL)hidden
+{
+    [[MobileRTC sharedRTC] getMeetingSettings].meetingPasswordHidden = hidden;
+}
+
+- (void)setBottomBarHidden:(BOOL)hidden
+{
+    [[MobileRTC sharedRTC] getMeetingSettings].bottomBarHidden = hidden;
 }
 
 @end
