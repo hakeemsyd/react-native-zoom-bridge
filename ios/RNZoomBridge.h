@@ -15,5 +15,7 @@
 
 - (void)setBottomBarHidden:(BOOL)hidden;
 
+- (void)disableDriveMode:(BOOL)disabled;
+
 @end
   

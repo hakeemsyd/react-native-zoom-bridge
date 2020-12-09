@@ -150,6 +150,7 @@ RCT_EXPORT_METHOD(
       [self setMeetingTitleHidden:YES];
       [self setMeetingPasswordHidden:YES];
       [self setBottomBarHidden:YES];
+      [self disableDriveMode:YES];
       if (ms) {
         ms.delegate = self;
     
@@ -246,6 +247,11 @@ RCT_EXPORT_METHOD(
 - (void)setBottomBarHidden:(BOOL)hidden
 {
     [[MobileRTC sharedRTC] getMeetingSettings].bottomBarHidden = hidden;
+}
+
+- (void)disableDriveMode:(BOOL)disabled
+{
+    [[[MobileRTC sharedRTC] getMeetingSettings] disableDriveMode:disabled];
 }
 
 @end
