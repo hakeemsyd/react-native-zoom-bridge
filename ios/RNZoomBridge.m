@@ -153,6 +153,8 @@ RCT_EXPORT_METHOD(
       [self disableDriveMode:YES];
       [self setAutoConnectInternetAudio:YES];
       [self setTopBarHidden:NO];
+      [self setMeetingLeaveHidden:NO];
+      [self setHostLeaveHidden:NO];
       if (ms) {
         ms.delegate = self;
     
@@ -264,6 +266,16 @@ RCT_EXPORT_METHOD(
 - (void)setTopBarHidden:(BOOL)hidden
 {
     [[MobileRTC sharedRTC] getMeetingSettings].topBarHidden = hidden;
+}
+
+- (void)setMeetingLeaveHidden:(BOOL)hidden
+{
+    [[MobileRTC sharedRTC] getMeetingSettings].meetingLeaveHidden = hidden;
+}
+
+- (void)setHostLeaveHidden:(BOOL)hidden
+{
+    [[MobileRTC sharedRTC] getMeetingSettings].hostLeaveHidden = hidden;
 }
 
 @end
