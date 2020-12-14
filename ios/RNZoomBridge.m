@@ -151,6 +151,8 @@ RCT_EXPORT_METHOD(
       [self setMeetingPasswordHidden:YES];
       [self setBottomBarHidden:YES];
       [self disableDriveMode:YES];
+      [self setAutoConnectInternetAudio:YES];
+      [self setTopBarHidden:NO];
       if (ms) {
         ms.delegate = self;
     
@@ -252,6 +254,16 @@ RCT_EXPORT_METHOD(
 - (void)disableDriveMode:(BOOL)disabled
 {
     [[[MobileRTC sharedRTC] getMeetingSettings] disableDriveMode:disabled];
+}
+
+- (void)setAutoConnectInternetAudio:(BOOL)connected
+{
+    [[[MobileRTC sharedRTC] getMeetingSettings] setAutoConnectInternetAudio:connected];
+}
+
+- (void)setTopBarHidden:(BOOL)hidden
+{
+    [[MobileRTC sharedRTC] getMeetingSettings].topBarHidden = hidden;
 }
 
 @end

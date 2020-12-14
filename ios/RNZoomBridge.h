@@ -17,5 +17,9 @@
 
 - (void)disableDriveMode:(BOOL)disabled;
 
+- (void)setAutoConnectInternetAudio:(BOOL)connected;
+
+- (void)setTopBarHidden:(BOOL)hidden;
+
 @end
   
