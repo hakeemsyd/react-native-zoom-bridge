@@ -21,9 +21,5 @@
 
 - (void)setTopBarHidden:(BOOL)hidden;
 
-- (void)setMeetingLeaveHidden:(BOOL)hidden;
-
-- (void)setHostLeaveHidden:(BOOL)hidden;
-
 @end
   
