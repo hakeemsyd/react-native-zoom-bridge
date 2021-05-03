@@ -173,11 +173,15 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
         promise.reject("ERR_ZOOM_JOIN", "ZoomSDK has not been initialized successfully");
         return;
       }
+      
+      ZoomSDK.getInstance().getMeetingSettingsHelper().setAutoConnectVoIPWhenJoinMeeting(true);
 
       final MeetingService meetingService = zoomSDK.getMeetingService();
 
       JoinMeetingOptions opts = new JoinMeetingOptions();
+      opts.no_audio=false;
       opts.no_driving_mode = true;
+      opts.no_disconnect_audio = true;
       MeetingViewsOptions meetOpts = new MeetingViewsOptions();
       opts.meeting_views_options = meetOpts.NO_BUTTON_MORE + meetOpts.NO_BUTTON_SHARE + meetOpts.NO_BUTTON_PARTICIPANTS + meetOpts.NO_BUTTON_VIDEO + meetOpts.NO_BUTTON_SWITCH_CAMERA + meetOpts.NO_BUTTON_AUDIO + meetOpts.NO_TEXT_MEETING_ID + meetOpts.NO_TEXT_PASSWORD;
       JoinMeetingParams params = new JoinMeetingParams();
