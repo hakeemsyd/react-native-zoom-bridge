@@ -2,11 +2,15 @@ package com.appgoalz.reactnative;
 
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import us.zoom.sdk.ZoomSDK;
 import us.zoom.sdk.ZoomError;
@@ -217,6 +221,35 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
   @Override
   public void onMeetingStatusChanged(MeetingStatus meetingStatus, int errorCode, int internalErrorCode) {
     Log.i(TAG, "onMeetingStatusChanged, meetingStatus=" + meetingStatus + ", errorCode=" + errorCode + ", internalErrorCode=" + internalErrorCode);
+
+    ReactContext reactAppContext = getReactApplicationContext();
+
+    switch (meetingStatus){
+      case MEETING_STATUS_CONNECTING:
+        Log.i(TAG, "onMeetingStatusChanged: meeting started");
+        WritableMap params = Arguments.createMap();
+        params.putString("event", "meeting-started");
+        if (reactAppContext != null) {
+          reactAppContext
+                  .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                  .emit("ZoomMeetingState", params);
+        }
+        break;
+      case MEETING_STATUS_FAILED:
+      case MEETING_STATUS_DISCONNECTING:
+        Log.i(TAG, "onMeetingStatusChanged: meeting ended");
+        WritableMap prams = Arguments.createMap();
+        prams.putString("event", "meeting-ended");
+        if (reactAppContext != null) {
+          reactAppContext
+                  .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                  .emit("ZoomMeetingState", prams);
+        }
+        break;
+      default:
+        Log.i(TAG, "onMeetingStatusChanged: "+ meetingStatus);
+        break;
+    }
 
     if (meetingPromise == null) {
       return;
