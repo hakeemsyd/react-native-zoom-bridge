@@ -3,6 +3,7 @@
 
 @implementation RNZoomBridge
 {
+  BOOL hasListeners;
   BOOL isInitialized;
   RCTPromiseResolveBlock initializePromiseResolve;
   RCTPromiseRejectBlock initializePromiseReject;
@@ -23,12 +24,27 @@
 
 + (BOOL)requiresMainQueueSetup
 {
-  return NO;
+  return YES;
 }
 
 - (dispatch_queue_t)methodQueue
 {
   return dispatch_get_main_queue();
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[@"ZoomMeetingState"];
+}
+
+-(void)startObserving {
+    hasListeners = YES;
+  NSLog(@"ZoomMeetingState startObserving");
+}
+
+-(void)stopObserving {
+    hasListeners = NO;
+  NSLog(@"ZoomMeetingState stopObserving");
 }
 
 RCT_EXPORT_MODULE()
@@ -198,6 +214,7 @@ RCT_EXPORT_METHOD(
     );
   } else {
     meetingPromiseResolve(@"Connected to zoom meeting");
+
   }
 
   meetingPromiseResolve = nil;
@@ -206,6 +223,17 @@ RCT_EXPORT_METHOD(
 
 - (void)onMeetingStateChange:(MobileRTCMeetingState)state {
   NSLog(@"onMeetingStatusChanged, meetingState=%d", state);
+    switch (state) {
+        case MobileRTCMeetingState_Connecting:
+            [self sendEventWithName:@"ZoomMeetingState" body:@"meeting-started"];
+            break;
+        case MobileRTCMeetingState_Idle:
+            [self sendEventWithName:@"ZoomMeetingState" body:@"meeting-ended"];
+            break;
+        default:
+            [self sendEventWithName:@"ZoomMeetingState" body:@"meeting state change"];
+            break;
+    }
 
   if (state == MobileRTCMeetingState_InMeeting || state == MobileRTCMeetingState_Idle) {
     if (!meetingPromiseResolve) {

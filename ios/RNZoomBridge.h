@@ -1,13 +1,14 @@
 
 #if __has_include("RCTBridgeModule.h")
 #import "RCTBridgeModule.h"
+#import <React/RCTEventEmitter.h>
 #else
 #import <React/RCTBridgeModule.h>
 #endif
 
 #import "MobileRTC.h"
 
-@interface RNZoomBridge : NSObject <RCTBridgeModule, MobileRTCAuthDelegate, MobileRTCMeetingServiceDelegate>
+@interface RNZoomBridge : RCTEventEmitter <RCTBridgeModule, MobileRTCAuthDelegate, MobileRTCMeetingServiceDelegate>
 
 - (void)setMeetingTitleHidden:(BOOL)hidden;
 
