@@ -83,6 +83,7 @@ RCT_EXPORT_METHOD(
       NSLog(@"onZoomSDKInitializeResult, no authService");
     }
   } @catch (NSError *ex) {
+      isInitialized = NO;
       reject(@"ERR_UNEXPECTED_EXCEPTION", @"Executing initialize", ex);
   }
 }
@@ -161,7 +162,7 @@ RCT_EXPORT_METHOD(
     @try {
       meetingPromiseResolve = resolve;
       meetingPromiseReject = reject;
-    
+
       MobileRTCMeetingService *ms = [[MobileRTC sharedRTC] getMeetingService];
       [self setMeetingTitleHidden:YES];
       [self setMeetingPasswordHidden:YES];
@@ -171,13 +172,13 @@ RCT_EXPORT_METHOD(
       [self setTopBarHidden:NO];
       if (ms) {
         ms.delegate = self;
-    
+
         NSDictionary *paramDict = @{
           kMeetingParam_Username: displayName,
           kMeetingParam_MeetingNumber: meetingNo,
           kMeetingParam_MeetingPassword: password
         };
-        
+
         MobileRTCMeetError joinMeetingResult = [ms joinMeetingWithDictionary:paramDict];
         NSLog(@"joinMeeting, joinMeetingResult=%d", joinMeetingResult);
       }
@@ -189,6 +190,7 @@ RCT_EXPORT_METHOD(
 - (void)onMobileRTCAuthReturn:(MobileRTCAuthError)returnValue {
   NSLog(@"nZoomSDKInitializeResult, errorCode=%d", returnValue);
   if(returnValue != MobileRTCAuthError_Success) {
+    isInitialized = NO;
     initializePromiseReject(
       @"ERR_ZOOM_INITIALIZATION",
       [NSString stringWithFormat:@"Error: %d", returnValue],
