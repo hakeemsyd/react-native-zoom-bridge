@@ -69,6 +69,7 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
           }
       });
     } catch (Exception ex) {
+      isInitialized = false;
       promise.reject("ERR_UNEXPECTED_EXCEPTION", ex);
     }
   }
@@ -177,7 +178,7 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
         promise.reject("ERR_ZOOM_JOIN", "ZoomSDK has not been initialized successfully");
         return;
       }
-      
+
       ZoomSDK.getInstance().getMeetingSettingsHelper().setAutoConnectVoIPWhenJoinMeeting(true);
 
       final MeetingService meetingService = zoomSDK.getMeetingService();
@@ -208,6 +209,7 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
   public void onZoomSDKInitializeResult(int errorCode, int internalErrorCode) {
     Log.i(TAG, "onZoomSDKInitializeResult, errorCode=" + errorCode + ", internalErrorCode=" + internalErrorCode);
     if(errorCode != ZoomError.ZOOM_ERROR_SUCCESS) {
+      isInitialized = false;
       initializePromise.reject(
               "ERR_ZOOM_INITIALIZATION",
               "Error: " + errorCode + ", internalErrorCode=" + internalErrorCode
