@@ -2,6 +2,11 @@ package com.appgoalz.reactnative;
 
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -257,7 +262,12 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
       return;
     }
 
-    if(meetingStatus == MeetingStatus.MEETING_STATUS_FAILED && errorCode != MeetingError.MEETING_ERROR_EXIT_WHEN_WAITING_HOST_START) {
+    List<Integer> validErrorCodes = Arrays.asList(MeetingError.MEETING_ERROR_EXIT_WHEN_WAITING_HOST_START, MeetingError.MEETING_ERROR_MEETING_OVER, MeetingError.MEETING_ERROR_SUCCESS);
+    Set<Integer> errorCodesSet = new HashSet(validErrorCodes);
+    Boolean shouldFailErrorCode = !errorCodesSet.contains(new Integer(errorCode));
+
+
+    if(meetingStatus == MeetingStatus.MEETING_STATUS_FAILED && shouldFailErrorCode) {
       meetingPromise.reject(
               "ERR_ZOOM_MEETING",
               "Error: " + errorCode + ", internalErrorCode=" + internalErrorCode
