@@ -257,13 +257,13 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
       return;
     }
 
-    if(meetingStatus == MeetingStatus.MEETING_STATUS_FAILED) {
+    if(meetingStatus == MeetingStatus.MEETING_STATUS_FAILED && errorCode != MeetingError.MEETING_ERROR_EXIT_WHEN_WAITING_HOST_START) {
       meetingPromise.reject(
               "ERR_ZOOM_MEETING",
               "Error: " + errorCode + ", internalErrorCode=" + internalErrorCode
       );
       meetingPromise = null;
-    } else if (meetingStatus == MeetingStatus.MEETING_STATUS_INMEETING) {
+    } else if (meetingStatus == MeetingStatus.MEETING_STATUS_INMEETING  || meetingStatus == MeetingStatus.MEETING_STATUS_IDLE) {
       meetingPromise.resolve("Connected to zoom meeting");
       meetingPromise = null;
     }
