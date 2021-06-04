@@ -262,12 +262,12 @@ public class RNZoomBridgeModule extends ReactContextBaseJavaModule implements Zo
       return;
     }
 
-    List<Integer> validErrorCodes = Arrays.asList(MeetingError.MEETING_ERROR_EXIT_WHEN_WAITING_HOST_START, MeetingError.MEETING_ERROR_MEETING_OVER, MeetingError.MEETING_ERROR_SUCCESS);
-    Set<Integer> errorCodesSet = new HashSet(validErrorCodes);
-    Boolean shouldFailErrorCode = !errorCodesSet.contains(new Integer(errorCode));
+    List<Integer> nonFailureErrorCodes = Arrays.asList(MeetingError.MEETING_ERROR_EXIT_WHEN_WAITING_HOST_START, MeetingError.MEETING_ERROR_MEETING_OVER, MeetingError.MEETING_ERROR_SUCCESS);
+    Set<Integer> nonFailureErrorCodesSet = new HashSet(nonFailureErrorCodes);
+    Boolean isFailureErrorCode = !nonFailureErrorCodesSet.contains(new Integer(errorCode));
 
 
-    if(meetingStatus == MeetingStatus.MEETING_STATUS_FAILED && shouldFailErrorCode) {
+    if(meetingStatus == MeetingStatus.MEETING_STATUS_FAILED && isFailureErrorCode) {
       meetingPromise.reject(
               "ERR_ZOOM_MEETING",
               "Error: " + errorCode + ", internalErrorCode=" + internalErrorCode
