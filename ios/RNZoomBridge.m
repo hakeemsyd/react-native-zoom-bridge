@@ -208,7 +208,7 @@ RCT_EXPORT_METHOD(
     return;
   }
 
-  if (errorCode != MobileRTCMeetError_Success) {
+  if (errorCode != MobileRTCMeetError_Success || errorCode != 0) {
     meetingPromiseReject(
       @"ERR_ZOOM_MEETING",
       [NSString stringWithFormat:@"Error: %d, internalErrorCode=%zd", errorCode, internalErrorCode],
@@ -256,11 +256,15 @@ RCT_EXPORT_METHOD(
     return;
   }
 
+   if (errorCode != MobileRTCMeetError_Success || errorCode != 0) {
+
   meetingPromiseReject(
     @"ERR_ZOOM_MEETING",
     [NSString stringWithFormat:@"Error: %d, internalErrorCode=%@", errorCode, message],
     [NSError errorWithDomain:@"us.zoom.sdk" code:errorCode userInfo:nil]
   );
+
+   }
 
   meetingPromiseResolve = nil;
   meetingPromiseReject = nil;
