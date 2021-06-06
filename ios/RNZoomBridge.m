@@ -208,15 +208,14 @@ RCT_EXPORT_METHOD(
     return;
   }
 
-  if (errorCode != MobileRTCMeetError_Success || errorCode != 0) {
+  if ((errorCode != MobileRTCMeetError_Success) && (errorCode != MobileRTCMeetError_MeetingOver)) {
     meetingPromiseReject(
       @"ERR_ZOOM_MEETING",
       [NSString stringWithFormat:@"Error: %d, internalErrorCode=%zd", errorCode, internalErrorCode],
       [NSError errorWithDomain:@"us.zoom.sdk" code:errorCode userInfo:nil]
     );
   } else {
-    meetingPromiseResolve(@"Connected to zoom meeting");
-
+    meetingPromiseResolve(@"[onMeetingReturn] Connected to zoom meeting");
   }
 
   meetingPromiseResolve = nil;
@@ -256,15 +255,15 @@ RCT_EXPORT_METHOD(
     return;
   }
 
-   if (errorCode != MobileRTCMeetError_Success || errorCode != 0) {
-
-  meetingPromiseReject(
-    @"ERR_ZOOM_MEETING",
-    [NSString stringWithFormat:@"Error: %d, internalErrorCode=%@", errorCode, message],
-    [NSError errorWithDomain:@"us.zoom.sdk" code:errorCode userInfo:nil]
-  );
-
-   }
+  if ((errorCode != MobileRTCMeetError_Success) && (errorCode != MobileRTCMeetError_MeetingOver)) {
+    meetingPromiseReject(
+      @"ERR_ZOOM_MEETING",
+      [NSString stringWithFormat:@"Error: %d, internalErrorCode=%@", errorCode, message],
+      [NSError errorWithDomain:@"us.zoom.sdk" code:errorCode userInfo:nil]
+    );
+  } else {
+    meetingPromiseResolve(@"[onMeetingError] Connected to zoom meeting");
+  }
 
   meetingPromiseResolve = nil;
   meetingPromiseReject = nil;
